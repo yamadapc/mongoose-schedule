@@ -1,0 +1,40 @@
+{
+  "name": "mongoose-schedule",
+  "version": "1.0.0",
+  "description": "A Kue Job to schedule a method to be called on some mongoose document or model, depending on whether a document id is passed.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yamadapc/mongoose-schedule"
+  },
+  "keywords": [
+    "mongoose",
+    "kue",
+    "cron",
+    "schedule"
+  ],
+  "author": "Pedro Yamada",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yamadapc/mongoose-schedule/issues"
+  },
+  "homepage": "https://github.com/yamadapc/mongoose-schedule",
+  "dependencies": {
+    "bluebird": "^1.2.2",
+    "mongoose-bluebird-utils": "0.0.9",
+    "lodash": "^2.4.1"
+  },
+  "peerDependencies": {
+    "mongoose": "^3.8"
+  },
+  "devDependencies": {
+    "mongoose": "^3.8",
+    "mocha": "~1.16.1",
+    "should": "^3.3.0",
+    "cron": "^1.0.4",
+    "sinon": "^1.9.1"
+  }
+}
