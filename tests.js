@@ -137,7 +137,7 @@ describe('schedule', function() {
         args[1].should.have.length(2);
 
         args[0].should.include('Error:');
-        args[0].should.includeEql(new Error('I\'m angry'));
+        args[1][1].should.match(/I\'m angry/);
         args[1].should.include('Stack:');
         done();
       });
