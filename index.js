@@ -1,5 +1,5 @@
 'use strict';
-/**
+/*!
  * Dependencies
  * --------------------------------------------------------------------------*/
 
@@ -8,19 +8,40 @@ var _        = require('lodash'),
     mongoose = require('mongoose');
 
 /**
- * schedule (Kue Job)
  * Schedules a method to be called on some mongoose document or model, depending
- * on whether a document id is passed.
+ * on whether a document id is passed at `job.data.doc_id`.
  *
- * data: {
- *   model: String,                    (mandatory)
- *   method: String,                   (mandatory)
- *   execution_date: Date,             (mandatory)
+ * ### Example:
  *
- *   doc_id: mongooose.Types.ObjectId, (optional)
- *   args: Array                       (optional)
- * }
- * --------------------------------------------------------------------------*/
+ * ```javascript
+ * var job = {
+ *   data: {
+ *     model: 'Something',
+ *     method: 'remove',
+ *     execution_date: new Date(20, 1, 2014),
+ *     args: [{ _id: some_id }, { active: false }]
+ *   }
+ * };
+ *
+ * mongooseSchedule.job(job, function() {});
+ * ```
+ *
+ * This will execute the `remove` method on the `Something` model with the
+ * defined arguments.
+ *
+ * @param {Object}   job A kue job.
+ * @param {Function} done A callback function.
+ *
+ * @param {Object} job.data The job's input data.
+ * @param {String} job.data.model The model to schedule a static/method on.
+ * @param {String} job.data.method The name of the method to schedule.
+ * @param {Date}   job.data.execution_date When to execute the method.
+ *
+ * @param {String} [job.data.doc_id] The target document's id. If provided, the
+ * `method` will be executed on the document instance, rather than as a static
+ * on the model.
+ * @param {Array}  [job.data.args] The arguments to pass into the method.
+ */
 
 exports.job = function(job, done) {
   var model_names = mongoose.modelNames();
