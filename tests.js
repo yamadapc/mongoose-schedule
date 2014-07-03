@@ -28,6 +28,10 @@ describe('schedule', function() {
       name: String
     });
 
+    MockSchema.methods.instanceMethod = function(cb) {
+      cb(null, 'Awesome');
+    };
+
     MockSchema.statics.errorWithAnger = function(msg, cb) {
       if(msg === 'anger') cb(new Error('I\'m angry'));
       else cb(null, 'I\'m cool');
@@ -139,6 +143,28 @@ describe('schedule', function() {
         args[0].should.include('Error:');
         args[1][1].should.match(/I\'m angry/);
         args[1].should.include('Stack:');
+        done();
+      });
+    });
+
+    it('validates instance methods', function(done) {
+      req.data.doc_id = this.mock._id;
+      req.data.method = 'errorWithAnger';
+      req.data.args = ['msg'];
+      schedule.job(req, function(err) {
+        should.exist(err);
+        err.should.match(/Invalid method name/);
+        done();
+      });
+    });
+
+    it('lets us execute intance methods', function(done) {
+      req.data.doc_id = this.mock._id;
+      req.data.method = 'instanceMethod';
+      req.data.args = [];
+      schedule.job(req, function(err) {
+        should.not.exist(err);
+        delete req.data.doc_id;
         done();
       });
     });

@@ -54,8 +54,10 @@ exports.job = function(job, done) {
   // validate the method name
   var tmp_model = mongoose.model(job.data.model);
 
-  if(job.data.doc_id && !tmp_model.prototype[job.data.method]) {
-    return done(new Error('Invalid method name'));
+  if(job.data.doc_id) {
+    if(!tmp_model.prototype[job.data.method]) {
+      return done(new Error('Invalid method name'));
+    }
   }
   else if(!tmp_model[job.data.method]) {
     return done(new Error('Invalid method name'));
