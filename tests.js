@@ -140,9 +140,9 @@ describe('schedule', function() {
         args[0].should.have.length(2);
         args[1].should.have.length(2);
 
-        args[0].should.include('Error:');
+        args[0].should.containEql('Error:');
         args[1][1].should.match(/I\'m angry/);
-        args[1].should.include('Stack:');
+        args[1].should.containEql('Stack:');
         done();
       });
     });
