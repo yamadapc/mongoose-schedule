@@ -3,8 +3,7 @@
  * Dependencies
  * --------------------------------------------------------------------------*/
 
-var _        = require('lodash'),
-    CronJob  = require('cron').CronJob,
+var CronJob  = require('cron').CronJob,
     mongoose = require('mongoose');
 
 function MongooseSchedule(db) {
@@ -55,7 +54,7 @@ MongooseSchedule.prototype.job = function(job, done) {
   var model_names = this.db.modelNames();
 
   // validate the model name
-  if(!_.contains(model_names, job.data.model)) {
+  if(model_names.indexOf(job.data.model) === -1) {
     return done(new Error('Invalid model name'));
   }
 
@@ -102,7 +101,7 @@ MongooseSchedule.prototype.execute = function execute(data, cb) {
 };
 
 MongooseSchedule.prototype.tap = function tap(logFn, cb /*,.. args*/) {
-  var args = _.rest(arguments, 2);
+  var args = Array.prototype.slice.call(arguments, 2);
 
   if(logFn) {
     if(args && args[0]) {
@@ -110,7 +109,7 @@ MongooseSchedule.prototype.tap = function tap(logFn, cb /*,.. args*/) {
       logFn('Stack:', args[0].stack);
     }
     else {
-      logFn('Callback values:', _.rest(args));
+      logFn('Callback values:', args.slice(1));
     }
   }
 
