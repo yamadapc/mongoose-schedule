@@ -48,6 +48,11 @@ describe('schedule', function() {
   });
   after(function(done) { mbUtils.removeP(this.mock).nodeify(done); });
 
+  it('exports the MongooseSchedule class', function() {
+    schedule.should.have.property('MongooseSchedule');
+    schedule.MongooseSchedule.should.be.instanceof(Function);
+  });
+
   describe('.execute', function() {
     it('completes without an error', function(done) {
       schedule.execute({

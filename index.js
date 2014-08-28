@@ -7,6 +7,14 @@ var _        = require('lodash'),
     CronJob  = require('cron').CronJob,
     mongoose = require('mongoose');
 
+function MongooseSchedule(db) {
+  this.db = db;
+  // Bind functions to avoid compatibility issues:
+  this.job = this.job.bind(this);
+  this.execute = this.execute.bind(this);
+  this.tap = this.tap.bind(this);
+}
+
 /**
  * Schedules a method to be called on some mongoose document or model, depending
  * on whether a document id is passed at `job.data.doc_id`.
@@ -43,8 +51,8 @@ var _        = require('lodash'),
  * @param {Array}  [job.data.args] The arguments to pass into the method.
  */
 
-exports.job = function(job, done) {
-  var model_names = mongoose.modelNames();
+MongooseSchedule.prototype.job = function(job, done) {
+  var model_names = this.db.modelNames();
 
   // validate the model name
   if(!_.contains(model_names, job.data.model)) {
@@ -52,7 +60,7 @@ exports.job = function(job, done) {
   }
 
   // validate the method name
-  var tmp_model = mongoose.model(job.data.model);
+  var tmp_model = this.db.model(job.data.model);
 
   if(job.data.doc_id) {
     if(!tmp_model.prototype[job.data.method]) {
@@ -68,14 +76,14 @@ exports.job = function(job, done) {
 
   // create the scheduled cronJob
   var cronJob = new CronJob({
-    onTick:   execute.bind(null, job.data, tap.bind(null, job.log, done)),
+    onTick:   this.execute.bind(this, job.data, this.tap.bind(this, job.log, done)),
     cronTime: new Date(job.data.execution_date)
   });
   cronJob.start();
 };
 
-var execute = exports.execute = function execute(data, cb) {
-  var model  = mongoose.model(data.model),
+MongooseSchedule.prototype.execute = function execute(data, cb) {
+  var model  = this.db.model(data.model),
       method = data.method,
       doc_id = data.doc_id,
       args   = data.args.concat(cb); // add the callback to the argument list
@@ -93,7 +101,7 @@ var execute = exports.execute = function execute(data, cb) {
   }
 };
 
-var tap = exports.tap = function tap(logFn, cb /*,.. args*/) {
+MongooseSchedule.prototype.tap = function tap(logFn, cb /*,.. args*/) {
   var args = _.rest(arguments, 2);
 
   if(logFn) {
@@ -108,3 +116,7 @@ var tap = exports.tap = function tap(logFn, cb /*,.. args*/) {
 
   cb.apply(null, args);
 };
+
+// Export the default instance and the class for custom db usage:
+exports = module.exports = new MongooseSchedule(mongoose);
+exports.MongooseSchedule = MongooseSchedule;
