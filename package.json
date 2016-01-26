@@ -23,16 +23,16 @@
   },
   "homepage": "https://github.com/yamadapc/mongoose-schedule",
   "dependencies": {
-    "bluebird": "^2.1.3",
-    "mongoose-bluebird-utils": "0.0.9"
+    "bluebird": "^3.1.5",
+    "mongoose-bluebird-utils": "0.0.11"
   },
   "peerDependencies": {
     "mongoose": "^3.8"
   },
   "devDependencies": {
-    "mongoose": "^3.8",
-    "mocha": "~1.20.1",
-    "should": "^4.0.4",
+    "mongoose": "^4.3.7",
+    "mocha": "~2.4.1",
+    "should": "^8.2.0",
     "cron": "^1.0.4",
     "sinon": "^1.9.1"
   }
