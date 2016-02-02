@@ -27,7 +27,7 @@
     "mongoose-bluebird-utils": "0.0.9"
   },
   "peerDependencies": {
-    "mongoose": "^3.8"
+    "mongoose": "^4.4.0"
   },
   "devDependencies": {
     "mongoose": "^3.8",
