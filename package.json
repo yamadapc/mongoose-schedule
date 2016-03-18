@@ -30,7 +30,7 @@
     "mongoose": "^3.8"
   },
   "devDependencies": {
-    "mongoose": "^3.8",
+    "mongoose": "^4.4.8",
     "mocha": "~2.4.5",
     "should": "^8.2.1",
     "cron": "^1.0.4",
